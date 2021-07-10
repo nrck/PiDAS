@@ -1,3 +1,8 @@
+---
+layout: default
+title: PiDAS（Raspberry Pi Picoで作る自作地震計）作成キット
+---
+
 ## PiDAS
 
 - [ドキュメントトップページ](https://nrck.github.io/PiDAS/)
