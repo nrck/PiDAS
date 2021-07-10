@@ -1,3 +1,8 @@
+---
+layout: default
+title: PiDAS作成キットに含まれるもの
+---
+
 ## 組立キットに含まれるもの
 
 - Raspberry Pi Pico本体　1個
@@ -13,3 +18,5 @@
 - 専用基板　1枚
 - 保護アクリル板　2枚(BOOTH販売の保護アクリル板付きセットのみ)
 - ネジ・スペーサ(BOOTH販売の保護アクリル板付きセットのみ)
+
+[ドキュメントトップページ](https://nrck.github.io/PiDAS/)
