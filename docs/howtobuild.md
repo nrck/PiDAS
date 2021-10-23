@@ -51,3 +51,5 @@ Raspberry Pi Pico本体にピンヘッダをはんだ付けします。20Pinヘ�
 #### 2. Raspberry Pi Picoに地震計プログラムをインストールする。
 
 [VS Code](https://code.visualstudio.com/download)と[Pico-GO](https://marketplace.visualstudio.com/items?itemName=ChrisWood.pico-go)使用して[本リポジトリ](https://github.com/nrck/PiDAS.git)のコードをRaspberry Pi Picoに書き込んでください。詳しくは[拙書](https://booth.pm/ja/items/3022619)を参考に実施していただけると幸いです。
+
+[ドキュメントトップページ](https://nrck.github.io/PiDAS/)
