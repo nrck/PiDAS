@@ -14,6 +14,7 @@ title: PiDASドキュメント
 
 - BOOTH
   - [組立キット](https://booth.pm/ja/items/3054511)
+  - [キット完成品](https://booth.pm/ja/items/3657143)
   - [同人誌](https://booth.pm/ja/items/3022619)
 - 技術書典オンライン
   - [組立キット](https://techbookfest.org/product/4828869456560128)
