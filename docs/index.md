@@ -9,6 +9,7 @@ title: PiDASドキュメント
 - [組立キット内容品](https://nrck.github.io/PiDAS/contents)
 - [キット組立方法](https://nrck.github.io/PiDAS/howtobuild)
 - [使い方](https://nrck.github.io/PiDAS/howtouse)
+- [トラブルシューティング](https://nrck.github.io/PiDAS/)
 
 ## 各種販売先
 
