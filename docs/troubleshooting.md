@@ -18,7 +18,8 @@ Visual Studio Code 1.6頃より発生しているPico-GOの不具合のようで
 以下の暫定対応が提示されていますのでどちらかを実施してください。
 
 - Visual Studio Codeのダウングレード
-- Visual Studio Codeのアンインストール&再インストール
+  - 1.65.2までバージョンを落としてください。
+  - https://update.code.visualstudio.com/1.65.2/win32-x64-user/stable
 
 ### C2のコンデンサの極性がわからない
 
