@@ -21,6 +21,13 @@ Visual Studio Code 1.6頃より発生しているPico-GOの不具合のようで
   - 1.65.2までバージョンを落としてください。
   - https://update.code.visualstudio.com/1.65.2/win32-x64-user/stable
 
+### Pico-GOのMarketplaceが404 Not Foundでダウンロードできない
+
+Pico-GOの開発者が多忙のためメンテナンスをやめてしまったようです。
+Pico-GOの派生先でメンテナンスが続けられているので、こちらを利用してください。
+詳しくはQiitaにまとめました。
+https://qiita.com/nr_ck/items/c9e99689fd5b3eb79506
+
 ### C2のコンデンサの極性がわからない
 
 シルク（基板上の白いガイドライン）のミスです。向かって上側、PiDASと書かれてる方がマイナス極（コンデンサに−のマークがあります）を接続してください。
