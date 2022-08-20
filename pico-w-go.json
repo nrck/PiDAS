@@ -1,4 +1,14 @@
 {
     "sync_folder": "",
-    "open_on_start": true
+    "open_on_start": true,
+    "sync_file_types": "py",
+    "py_ignore": [
+        "LICENSE",
+        "NOTICE",
+        "pico-go.json",
+        "pico-w-go.json",
+        "README.md",
+        "docs",
+        "docs/en"
+    ]
 }
