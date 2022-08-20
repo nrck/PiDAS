@@ -26,6 +26,7 @@ Visual Studio Code 1.6頃より発生しているPico-GOの不具合のようで
 Pico-GOの開発者が多忙のためメンテナンスをやめてしまったようです。
 Pico-GOの派生先でメンテナンスが続けられているので、こちらを利用してください。
 詳しくはQiitaにまとめました。
+
 https://qiita.com/nr_ck/items/c9e99689fd5b3eb79506
 
 ### C2のコンデンサの極性がわからない
