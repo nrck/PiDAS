@@ -3,7 +3,7 @@ from driver import led, MCP3204
 from machine import SPI, Pin
 import utime
 import math
-import tool.filter
+import tool.filterbank
 
 # ==========================================================
 # Constants setting
@@ -37,14 +37,14 @@ ADC = MCP3204.MCP3204(
 LED = led.Led()
 
 # Frequency filter
-FILTER = tool.filter.Filter(SAMPLING_HZ)
+FILTERBANK = tool.filterbank.Filterbank(SAMPLING_HZ)
 
 
 # ==========================================================
 # Variable setting
 # ==========================================================
 # Data from A/D
-row_data = [[0] * DATA_SIZE, [0] * DATA_SIZE, [0] * DATA_SIZE]
+raw_data = [[0] * DATA_SIZE, [0] * DATA_SIZE, [0] * DATA_SIZE]
 
 # Adjusted data
 offsetted_data = [[0] * DATA_SIZE, [0] * DATA_SIZE, [0] * DATA_SIZE]
@@ -55,9 +55,6 @@ __composite_gal = [0.0] * DATA_SIZE
 
 # 3-axis adjust value
 offset = [0.0, 0.0, 0.0]
-
-# Adujusting time( offset_counter / sampling rate = sec)
-offset_counter = DATA_SIZE * 5
 
 # The system is adjusted
 is_offsetted = False
@@ -102,34 +99,35 @@ def get_seismic_intensity_class(scale: float):
 def read_acceleration(axis: int):
     # Read 3-axis data from acceleration sensor
     a = ADC.read(axis)
-    index = frame % len(row_data[axis])
+    index = frame % len(raw_data[axis])
 
     # Remove outliers
     if 0 < a < 4096 and a != 1024 and a != 2048 and a != 3072:
-        row_data[axis][index] = a
+        raw_data[axis][index] = a
     else:
-        row_data[axis][index] = int(offset[axis])
+        raw_data[axis][index] = int(offset[axis])
 
     # Set offset value if not adjusted.
     if is_offsetted == False:
-        offset[axis] = sum(row_data[axis]) / len(row_data[axis])
-    offsetted_data[axis][index] = int(row_data[axis][index] - offset[axis])
+        offset[axis] = raw_data[axis][index]
+        
+    offsetted_data[axis][index] = int(raw_data[axis][index] - offset[axis]) / 1024 * 981
 
 
 def set_filtered_data(axis: int):
-    # Calculate with the latest 5 frames.
-    offsetted_dataset = [0.0] * 5
+    # Calculate with the latest 3 frames.
+    offsetted_dataset = [0.0] * 3
     for i in range(len(offsetted_dataset)):
-        index = (frame - len(offsetted_dataset) + i + 1) % len(row_data[axis])
+        index = (frame - len(offsetted_dataset) + i + 1) % DATA_SIZE
         # G to Gal.
-        offsetted_dataset[i] = offsetted_data[axis][index] / 1024 * 980
-    index = frame % len(row_data[axis])
-    filtered_data[axis][index] = FILTER.exec(offsetted_dataset).pop()
+        offsetted_dataset[i] = offsetted_data[axis][index] 
+    index = frame % DATA_SIZE
+    filtered_data[axis][index] = FILTERBANK.exec(axis, offsetted_dataset)
 
 
 def set_composite_gal():
     # Vector composition of 3-axis data
-    index = frame % len(filtered_data[0])
+    index = frame % DATA_SIZE
     __composite_gal[index] = math.sqrt(
         filtered_data[0][index] ** 2 +
         filtered_data[1][index] ** 2 +
@@ -154,7 +152,6 @@ while True:
     # LED updated every second
     if frame % SAMPLING_HZ == 0:
         __gal = sorted(__composite_gal)[-int(SAMPLING_HZ * 0.3)]
-        print("Gal:", __gal)
         if 0 < __gal:
             scale = round(2.0 * math.log10(__gal) + 0.94, 2)
             sic = get_seismic_intensity_class(scale)
@@ -174,31 +171,24 @@ while True:
     elif frame % (SAMPLING_HZ/4) == 0 and sic < latest_sic and is_offsetted:
         # Blink the LED corresponding to the seismic intensity of past earthquakes.
         LED.toggle(latest_sic)
-    elif is_offsetted == False:
-        # Make the LED wave during zero point correction.
-        v = int(offset_counter * 100 / (SAMPLING_HZ * 5)) % 10
-        LED.brink_scale(v, v)
 
-    # Initialize the frame after 60 seconds
+    # Reinitialize the frame after 60 seconds
     if SAMPLING_HZ * 60 <= frame:
         frame = 0
 
     frame += 1
     current_time = utime.time_ns()
     sleep_time = 1 / SAMPLING_HZ - (current_time - start_time)/1000000.0
+
+    if is_offsetted == False:
+        is_offsetted = True
+        
     if 0 < sleep_time:
         utime.sleep(sleep_time)
-
-    if offset_counter <= 0 and is_offsetted == False:
-        is_offsetted = True
-        print("offset complete!!")
-    elif 0 < offset_counter:
-        offset_counter -= 1
 
     if ADJUST_START_PIN.value() == Pin.PULL_UP and is_offsetted:
         # When the zero point adjust button is pressed, the correction is started.
         is_offsetted = False
-        offset_counter = SAMPLING_HZ * 5
         latest_time = utime.time()
         latest_sic = 0
-        print("offset start!!")
+        print("reset")
